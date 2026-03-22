@@ -328,67 +328,67 @@
                 name: '东京',
                 timezone: 'Asia/Tokyo',
                 country: '日本',
-                rssUrl: 'https://feeds.bbci.co.uk/zhongwen/simp/rss.xml'
+                rssUrl: 'https://www3.nhk.or.jp/rss/news/cat0.xml'
             },
             {
                 name: '纽约',
                 timezone: 'America/New_York',
                 country: '美国',
-                rssUrl: 'https://feeds.bbci.co.uk/zhongwen/simp/rss.xml'
+                rssUrl: 'https://feeds.bbci.co.uk/news/rss.xml'
             },
             {
                 name: '伦敦',
                 timezone: 'Europe/London',
                 country: '英国',
-                rssUrl: 'https://feeds.bbci.co.uk/zhongwen/simp/rss.xml'
+                rssUrl: 'https://feeds.bbci.co.uk/news/uk/rss.xml'
             },
             {
                 name: '巴黎',
                 timezone: 'Europe/Paris',
                 country: '法国',
-                rssUrl: 'https://feeds.bbci.co.uk/zhongwen/simp/rss.xml'
+                rssUrl: 'https://feeds.bbci.co.uk/news/world/europe/rss.xml'
             },
             {
                 name: '悉尼',
                 timezone: 'Australia/Sydney',
                 country: '澳大利亚',
-                rssUrl: 'https://feeds.bbci.co.uk/zhongwen/simp/rss.xml'
+                rssUrl: 'https://feeds.bbci.co.uk/news/world/asia/rss.xml'
             },
             {
                 name: '迪拜',
                 timezone: 'Asia/Dubai',
                 country: '阿联酋',
-                rssUrl: 'https://feeds.bbci.co.uk/zhongwen/simp/rss.xml'
+                rssUrl: 'https://feeds.bbci.co.uk/news/world/middle_east/rss.xml'
             },
             {
                 name: '莫斯科',
                 timezone: 'Europe/Moscow',
                 country: '俄罗斯',
-                rssUrl: 'https://feeds.bbci.co.uk/zhongwen/simp/rss.xml'
+                rssUrl: 'https://feeds.bbci.co.uk/news/world/europe/rss.xml'
             },
             {
                 name: '洛杉矶',
                 timezone: 'America/Los_Angeles',
                 country: '美国',
-                rssUrl: 'https://feeds.bbci.co.uk/zhongwen/simp/rss.xml'
+                rssUrl: 'https://feeds.bbci.co.uk/news/world/americas/rss.xml'
             },
             {
                 name: '新加坡',
                 timezone: 'Asia/Singapore',
                 country: '新加坡',
-                rssUrl: 'https://feeds.bbci.co.uk/zhongwen/simp/rss.xml'
+                rssUrl: 'https://feeds.bbci.co.uk/news/world/asia/rss.xml'
             },
             {
                 name: '柏林',
                 timezone: 'Europe/Berlin',
                 country: '德国',
-                rssUrl: 'https://feeds.bbci.co.uk/zhongwen/simp/rss.xml'
+                rssUrl: 'https://feeds.bbci.co.uk/news/world/europe/rss.xml'
             },
             {
                 name: '首尔',
                 timezone: 'Asia/Seoul',
                 country: '韩国',
-                rssUrl: 'https://feeds.bbci.co.uk/zhongwen/simp/rss.xml'
+                rssUrl: 'https://feeds.bbci.co.uk/news/world/asia/rss.xml'
             }
         ];
 
@@ -601,6 +601,50 @@
             }
         }
 
+        // 翻译函数（使用LibreTranslate公共实例）
+        async function translateText(text, targetLang = 'zh') {
+            try {
+                // 尝试多个LibreTranslate实例
+                const instances = [
+                    'https://libretranslate.de',
+                    'https://libretranslate.org',
+                    'https://translate.terraprint.co'
+                ];
+
+                for (const instance of instances) {
+                    try {
+                        const response = await fetch(`${instance}/translate`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                q: text,
+                                source: 'auto',
+                                target: targetLang,
+                                format: 'text'
+                            })
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data && data.translatedText) {
+                                return data.translatedText;
+                            }
+                        }
+                    } catch (e) {
+                        console.log(`Translation failed for ${instance}:`, e.message);
+                        continue;
+                    }
+                }
+            } catch (error) {
+                console.log('Translation error:', error);
+            }
+
+            // 所有翻译器都失败，返回原文
+            return text;
+        }
+
         // 获取指定城市的最新新闻
         async function fetchNewsForCity(city, cityIndex) {
             try {
@@ -631,9 +675,9 @@
                             desc = desc.length > 80 ? desc.substring(0, 80) + '...' : desc;
                         }
 
-                        // BBC中文新闻源，直接显示无需翻译
-                        const title = item.title;
-                        const translatedDesc = desc || '暂无详情';
+                        // 尝试翻译，如果失败则显示原文
+                        const title = await translateText(item.title);
+                        const translatedDesc = desc ? await translateText(desc) : '暂无详情';
 
                         newsHTML += `
                             <div class="news-item">
