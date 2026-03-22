@@ -176,17 +176,22 @@
         }
 
         .news-item {
-            font-size: 10px;
+            font-size: 11px;
             color: #888;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             display: block;
+        }
+
+        .news-item:last-child {
+            margin-bottom: 0;
         }
 
         .news-title {
             color: #00e5ff;
             font-weight: bold;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
             text-shadow: 0 0 5px #00e5ff;
+            line-height: 1.3;
         }
 
         .news-desc {
@@ -536,6 +541,21 @@
             }
         }
 
+        // 翻译函数（使用免费的翻译API）
+        async function translateText(text, targetLang = 'zh') {
+            try {
+                const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${targetLang}`);
+                const data = await response.json();
+                if (data && data.responseData && data.responseData.translatedText) {
+                    return data.responseData.translatedText;
+                }
+                return text; // 翻译失败返回原文
+            } catch (error) {
+                console.log('Translation error:', error);
+                return text; // 翻译失败返回原文
+            }
+        }
+
         // 获取最新新闻（使用BBC World News RSS）
         async function fetchNews() {
             try {
@@ -544,39 +564,51 @@
 
                 const data = await response.json();
                 if (data && data.items && data.items.length > 0) {
-                    const newsItems = data.items.slice(0, 12); // 获取12条新闻
+                    const newsItems = data.items.slice(0, 3); // 只获取3条新闻
 
-                    // 更新每个城市的新闻
-                    newsItems.forEach((item, index) => {
-                        const cityElement = document.getElementById(`news-${index}`);
-                        if (cityElement) {
-                            const title = item.title.length > 35 ? item.title.substring(0, 35) + '...' : item.title;
-
-                            // 提取简短描述
-                            let desc = '';
-                            if (item.description) {
-                                const descMatch = item.description.match(/<p>(.*?)<\/p>/);
-                                if (descMatch) {
-                                    desc = descMatch[1].replace(/<[^>]*>/g, '').trim();
-                                } else {
-                                    desc = item.description.replace(/<[^>]*>/g, '').trim();
-                                }
-                                desc = desc.length > 50 ? desc.substring(0, 50) + '...' : desc;
+                    // 翻译所有新闻
+                    const translatedNews = [];
+                    for (const item of newsItems) {
+                        // 提取简短描述
+                        let desc = '';
+                        if (item.description) {
+                            const descMatch = item.description.match(/<p>(.*?)<\/p>/);
+                            if (descMatch) {
+                                desc = descMatch[1].replace(/<[^>]*>/g, '').trim();
+                            } else {
+                                desc = item.description.replace(/<[^>]*>/g, '').trim();
                             }
+                            desc = desc.length > 80 ? desc.substring(0, 80) + '...' : desc;
+                        }
 
-                            cityElement.innerHTML = `
+                        // 翻译标题和描述
+                        const translatedTitle = await translateText(item.title);
+                        const translatedDesc = desc ? await translateText(desc) : '';
+
+                        translatedNews.push({
+                            title: translatedTitle,
+                            desc: translatedDesc || '暂无详情'
+                        });
+                    }
+
+                    // 更新所有城市的新闻（都显示相同的3条新闻）
+                    document.querySelectorAll('.news-section').forEach((cityElement) => {
+                        let newsHTML = '';
+                        translatedNews.forEach((news, i) => {
+                            newsHTML += `
                                 <div class="news-item">
-                                    <div class="news-title">${title}</div>
-                                    <div class="news-desc">${desc || '暂无详情'}</div>
+                                    <div class="news-title">${i + 1}. ${news.title}</div>
+                                    <div class="news-desc">${news.desc}</div>
                                 </div>
                             `;
-                        }
+                        });
+                        cityElement.innerHTML = newsHTML;
                     });
                 }
             } catch (error) {
                 console.log('News fetch error:', error);
                 // 加载失败时显示占位内容
-                document.querySelectorAll('.news-section').forEach((el, i) => {
+                document.querySelectorAll('.news-section').forEach((el) => {
                     el.innerHTML = `<div class="news-item"><div class="news-title">新闻加载中...</div><div class="news-desc">请稍候</div></div>`;
                 });
             }
