@@ -104,6 +104,26 @@
             line-height: 1.5;
         }
 
+        .news-section {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #333;
+        }
+
+        .news-item {
+            font-size: 10px;
+            color: #aaa;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .news-item::before {
+            content: '>';
+            margin-right: 5px;
+            color: #0f0;
+        }
+
         .refresh-btn {
             display: block;
             width: 100%;
@@ -217,18 +237,18 @@
 
     <script>
         const cities = [
-            { name: 'Beijing', timezone: 'Asia/Shanghai', country: 'China' },
-            { name: 'Tokyo', timezone: 'Asia/Tokyo', country: 'Japan' },
-            { name: 'New York', timezone: 'America/New_York', country: 'USA' },
-            { name: 'London', timezone: 'Europe/London', country: 'UK' },
-            { name: 'Paris', timezone: 'Europe/Paris', country: 'France' },
-            { name: 'Sydney', timezone: 'Australia/Sydney', country: 'Australia' },
-            { name: 'Dubai', timezone: 'Asia/Dubai', country: 'UAE' },
-            { name: 'Moscow', timezone: 'Europe/Moscow', country: 'Russia' },
-            { name: 'Los Angeles', timezone: 'America/Los_Angeles', country: 'USA' },
-            { name: 'Singapore', timezone: 'Asia/Singapore', country: 'Singapore' },
-            { name: 'Berlin', timezone: 'Europe/Berlin', country: 'Germany' },
-            { name: 'Seoul', timezone: 'Asia/Seoul', country: 'South Korea' }
+            { name: 'Beijing', timezone: 'Asia/Shanghai', country: 'China', news: ['Tech innovation summit', 'Green energy expansion'] },
+            { name: 'Tokyo', timezone: 'Asia/Tokyo', country: 'Japan', news: ['Spring tourism peak', 'Semiconductor investments'] },
+            { name: 'New York', timezone: 'America/New_York', country: 'USA', news: ['Market update', 'Tech earnings season'] },
+            { name: 'London', timezone: 'Europe/London', country: 'UK', news: ['Financial hub news', 'Climate policies'] },
+            { name: 'Paris', timezone: 'Europe/Paris', country: 'France', news: ['Cultural events', 'EU regulations'] },
+            { name: 'Sydney', timezone: 'Australia/Sydney', country: 'Australia', news: ['Mining sector updates', 'Tourism recovery'] },
+            { name: 'Dubai', timezone: 'Asia/Dubai', country: 'UAE', news: ['Oil market trends', 'Expo 2026 preparations'] },
+            { name: 'Moscow', timezone: 'Europe/Moscow', country: 'Russia', news: ['Trade relations', 'Energy sector news'] },
+            { name: 'Los Angeles', timezone: 'America/Los_Angeles', country: 'USA', news: ['Entertainment industry', 'Tech startup scene'] },
+            { name: 'Singapore', timezone: 'Asia/Singapore', country: 'Singapore', news: ['Digital economy', 'Regional trade hub'] },
+            { name: 'Berlin', timezone: 'Europe/Berlin', country: 'Germany', news: ['Manufacturing news', 'Energy transition'] },
+            { name: 'Seoul', timezone: 'Asia/Seoul', country: 'South Korea', news: ['Tech exports', 'K-wave expansion'] }
         ];
 
         function formatTime(date, timezone) {
@@ -287,6 +307,8 @@
             const date = formatDate(now, city.timezone);
             const offset = getOffset(city.timezone);
 
+            const newsHtml = city.news.map(news => `<div class="news-item">${news}</div>`).join('');
+
             const item = document.createElement('div');
             item.className = 'clock-item pixel-border';
             item.innerHTML = `
@@ -297,6 +319,7 @@
                 <div class="time-display" data-timezone="${city.timezone}">${time}</div>
                 <div class="date-display">${date}</div>
                 <div class="info-line">${offset}</div>
+                <div class="news-section">${newsHtml}</div>
             `;
             return item;
         }
