@@ -73,13 +73,11 @@
             font-size: 14px;
             color: #ff0;
             font-weight: bold;
-            text-transform: uppercase;
         }
 
         .country-name {
             font-size: 11px;
             color: #888;
-            text-transform: uppercase;
         }
 
         .time-display {
@@ -113,15 +111,19 @@
         .news-item {
             font-size: 10px;
             color: #aaa;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: flex-start;
+            margin-bottom: 6px;
+            display: block;
         }
 
-        .news-item::before {
-            content: '>';
-            margin-right: 5px;
-            color: #0f0;
+        .news-title {
+            color: #0ff;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .news-desc {
+            color: #888;
+            line-height: 1.3;
         }
 
         .refresh-btn {
@@ -217,8 +219,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>▓▓ WORLD CLOCK ▓▓</h1>
-            <div class="subtitle">STEAM ONLINE: <span id="steam-online" style="color:#0f0">Loading...</span> <span class="blink">●</span></div>
+            <h1>▓▓ 世界时钟 ▓▓</h1>
+            <div class="subtitle">Steam在线: <span id="steam-online" style="color:#0f0">加载中...</span> <span class="blink">●</span></div>
         </header>
 
         <div class="clocks-list" id="clocks-list">
@@ -229,26 +231,26 @@
 
         <footer>
             ━━━━━━━━━━━━━━━━━━━<br>
-            12 CITIES · 24H FORMAT<br>
-            AUTO UPDATE · STEAM STATS<br>
+            12个城市 · 24小时制<br>
+            自动更新 · Steam统计<br>
             ━━━━━━━━━━━━━━━━━━━
         </footer>
     </div>
 
     <script>
         const cities = [
-            { name: 'Beijing', timezone: 'Asia/Shanghai', country: 'China', news: ['Tech innovation summit', 'Green energy expansion'] },
-            { name: 'Tokyo', timezone: 'Asia/Tokyo', country: 'Japan', news: ['Spring tourism peak', 'Semiconductor investments'] },
-            { name: 'New York', timezone: 'America/New_York', country: 'USA', news: ['Market update', 'Tech earnings season'] },
-            { name: 'London', timezone: 'Europe/London', country: 'UK', news: ['Financial hub news', 'Climate policies'] },
-            { name: 'Paris', timezone: 'Europe/Paris', country: 'France', news: ['Cultural events', 'EU regulations'] },
-            { name: 'Sydney', timezone: 'Australia/Sydney', country: 'Australia', news: ['Mining sector updates', 'Tourism recovery'] },
-            { name: 'Dubai', timezone: 'Asia/Dubai', country: 'UAE', news: ['Oil market trends', 'Expo 2026 preparations'] },
-            { name: 'Moscow', timezone: 'Europe/Moscow', country: 'Russia', news: ['Trade relations', 'Energy sector news'] },
-            { name: 'Los Angeles', timezone: 'America/Los_Angeles', country: 'USA', news: ['Entertainment industry', 'Tech startup scene'] },
-            { name: 'Singapore', timezone: 'Asia/Singapore', country: 'Singapore', news: ['Digital economy', 'Regional trade hub'] },
-            { name: 'Berlin', timezone: 'Europe/Berlin', country: 'Germany', news: ['Manufacturing news', 'Energy transition'] },
-            { name: 'Seoul', timezone: 'Asia/Seoul', country: 'South Korea', news: ['Tech exports', 'K-wave expansion'] }
+            { name: '北京', timezone: 'Asia/Shanghai', country: '中国' },
+            { name: '东京', timezone: 'Asia/Tokyo', country: '日本' },
+            { name: '纽约', timezone: 'America/New_York', country: '美国' },
+            { name: '伦敦', timezone: 'Europe/London', country: '英国' },
+            { name: '巴黎', timezone: 'Europe/Paris', country: '法国' },
+            { name: '悉尼', timezone: 'Australia/Sydney', country: '澳大利亚' },
+            { name: '迪拜', timezone: 'Asia/Dubai', country: '阿联酋' },
+            { name: '莫斯科', timezone: 'Europe/Moscow', country: '俄罗斯' },
+            { name: '洛杉矶', timezone: 'America/Los_Angeles', country: '美国' },
+            { name: '新加坡', timezone: 'Asia/Singapore', country: '新加坡' },
+            { name: '柏林', timezone: 'Europe/Berlin', country: '德国' },
+            { name: '首尔', timezone: 'Asia/Seoul', country: '韩国' }
         ];
 
         function formatTime(date, timezone) {
@@ -307,8 +309,6 @@
             const date = formatDate(now, city.timezone);
             const offset = getOffset(city.timezone);
 
-            const newsHtml = city.news.map(news => `<div class="news-item">${news}</div>`).join('');
-
             const item = document.createElement('div');
             item.className = 'clock-item pixel-border';
             item.innerHTML = `
@@ -319,7 +319,9 @@
                 <div class="time-display" data-timezone="${city.timezone}">${time}</div>
                 <div class="date-display">${date}</div>
                 <div class="info-line">${offset}</div>
-                <div class="news-section">${newsHtml}</div>
+                <div class="news-section" id="news-${cities.indexOf(city)}">
+                    <div class="news-item">加载新闻中...</div>
+                </div>
             `;
             return item;
         }
@@ -438,7 +440,7 @@
 
                     const steamElement = document.getElementById('steam-online');
                     if (steamElement) {
-                        steamElement.textContent = steamOnlineCount.toLocaleString() + ' users';
+                        steamElement.textContent = steamOnlineCount.toLocaleString() + ' 人';
                         steamElement.style.color = '#0f0';
                     }
                 }
@@ -447,12 +449,12 @@
                 const steamElement = document.getElementById('steam-online');
                 if (steamElement) {
                     if (steamOnlineCount > 0) {
-                        steamElement.textContent = steamOnlineCount.toLocaleString() + ' users';
+                        steamElement.textContent = steamOnlineCount.toLocaleString() + ' 人';
                         steamElement.style.color = '#ff0';
                     } else {
                         // 使用估算值（Steam平均在线约2500-3500万）
                         steamOnlineCount = 31000000;
-                        steamElement.textContent = steamOnlineCount.toLocaleString() + ' (est)';
+                        steamElement.textContent = steamOnlineCount.toLocaleString() + ' (估算)';
                         steamElement.style.color = '#ff0';
                     }
                 }
@@ -467,20 +469,41 @@
 
                 const data = await response.json();
                 if (data && data.items && data.items.length > 0) {
-                    const newsItems = data.items.slice(0, 5);
+                    const newsItems = data.items.slice(0, 12); // 获取12条新闻
 
                     // 更新每个城市的新闻
                     newsItems.forEach((item, index) => {
-                        const cityIndex = index % cities.length;
-                        const cityElement = document.querySelectorAll('.news-section')[cityIndex];
+                        const cityElement = document.getElementById(`news-${index}`);
                         if (cityElement) {
-                            const title = item.title.length > 40 ? item.title.substring(0, 40) + '...' : item.title;
-                            cityElement.innerHTML = `<div class="news-item">${title}</div>`;
+                            const title = item.title.length > 35 ? item.title.substring(0, 35) + '...' : item.title;
+
+                            // 提取简短描述
+                            let desc = '';
+                            if (item.description) {
+                                const descMatch = item.description.match(/<p>(.*?)<\/p>/);
+                                if (descMatch) {
+                                    desc = descMatch[1].replace(/<[^>]*>/g, '').trim();
+                                } else {
+                                    desc = item.description.replace(/<[^>]*>/g, '').trim();
+                                }
+                                desc = desc.length > 50 ? desc.substring(0, 50) + '...' : desc;
+                            }
+
+                            cityElement.innerHTML = `
+                                <div class="news-item">
+                                    <div class="news-title">${title}</div>
+                                    <div class="news-desc">${desc || '暂无详情'}</div>
+                                </div>
+                            `;
                         }
                     });
                 }
             } catch (error) {
                 console.log('News fetch error:', error);
+                // 加载失败时显示占位内容
+                document.querySelectorAll('.news-section').forEach((el, i) => {
+                    el.innerHTML = `<div class="news-item"><div class="news-title">新闻加载中...</div><div class="news-desc">请稍候</div></div>`;
+                });
             }
         }
 
