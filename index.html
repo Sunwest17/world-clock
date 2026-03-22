@@ -69,14 +69,16 @@
             margin-bottom: 8px;
         }
 
-        .city-flag {
-            font-size: 24px;
-        }
-
         .city-name {
             font-size: 14px;
             color: #ff0;
             font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .country-name {
+            font-size: 11px;
+            color: #888;
             text-transform: uppercase;
         }
 
@@ -195,8 +197,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>▓▓ 世界时钟 ▓▓</h1>
-            <div class="subtitle">实时同步中 <span class="blink">●</span></div>
+            <h1>▓▓ WORLD CLOCK ▓▓</h1>
+            <div class="subtitle">STEAM ONLINE: <span id="steam-online" style="color:#0f0">Loading...</span> <span class="blink">●</span></div>
         </header>
 
         <div class="clocks-list" id="clocks-list">
@@ -207,26 +209,26 @@
 
         <footer>
             ━━━━━━━━━━━━━━━━━━━<br>
-            12个城市 · 24小时制<br>
-            每秒自动更新<br>
+            12 CITIES · 24H FORMAT<br>
+            AUTO UPDATE · STEAM STATS<br>
             ━━━━━━━━━━━━━━━━━━━
         </footer>
     </div>
 
     <script>
         const cities = [
-            { name: '北京', timezone: 'Asia/Shanghai', flag: '🇨🇳' },
-            { name: '东京', timezone: 'Asia/Tokyo', flag: '🇯🇵' },
-            { name: '纽约', timezone: 'America/New_York', flag: '🇺🇸' },
-            { name: '伦敦', timezone: 'Europe/London', flag: '🇬🇧' },
-            { name: '巴黎', timezone: 'Europe/Paris', flag: '🇫🇷' },
-            { name: '悉尼', timezone: 'Australia/Sydney', flag: '🇦🇺' },
-            { name: '迪拜', timezone: 'Asia/Dubai', flag: '🇦🇪' },
-            { name: '莫斯科', timezone: 'Europe/Moscow', flag: '🇷🇺' },
-            { name: '洛杉矶', timezone: 'America/Los_Angeles', flag: '🇺🇸' },
-            { name: '新加坡', timezone: 'Asia/Singapore', flag: '🇸🇬' },
-            { name: '柏林', timezone: 'Europe/Berlin', flag: '🇩🇪' },
-            { name: '首尔', timezone: 'Asia/Seoul', flag: '🇰🇷' }
+            { name: 'Beijing', timezone: 'Asia/Shanghai', country: 'China' },
+            { name: 'Tokyo', timezone: 'Asia/Tokyo', country: 'Japan' },
+            { name: 'New York', timezone: 'America/New_York', country: 'USA' },
+            { name: 'London', timezone: 'Europe/London', country: 'UK' },
+            { name: 'Paris', timezone: 'Europe/Paris', country: 'France' },
+            { name: 'Sydney', timezone: 'Australia/Sydney', country: 'Australia' },
+            { name: 'Dubai', timezone: 'Asia/Dubai', country: 'UAE' },
+            { name: 'Moscow', timezone: 'Europe/Moscow', country: 'Russia' },
+            { name: 'Los Angeles', timezone: 'America/Los_Angeles', country: 'USA' },
+            { name: 'Singapore', timezone: 'Asia/Singapore', country: 'Singapore' },
+            { name: 'Berlin', timezone: 'Europe/Berlin', country: 'Germany' },
+            { name: 'Seoul', timezone: 'Asia/Seoul', country: 'South Korea' }
         ];
 
         function formatTime(date, timezone) {
@@ -284,18 +286,17 @@
             const time = formatTime(now, city.timezone);
             const date = formatDate(now, city.timezone);
             const offset = getOffset(city.timezone);
-            const beijingDiff = getTimeDifference(city.timezone, 'Asia/Shanghai');
 
             const item = document.createElement('div');
             item.className = 'clock-item pixel-border';
             item.innerHTML = `
                 <div class="clock-header">
-                    <span class="city-flag">${city.flag}</span>
                     <span class="city-name">${city.name}</span>
+                    <span class="country-name">${city.country}</span>
                 </div>
                 <div class="time-display" data-timezone="${city.timezone}">${time}</div>
                 <div class="date-display">${date}</div>
-                <div class="info-line">${offset} · 相对北京 ${beijingDiff}h</div>
+                <div class="info-line">${offset}</div>
             `;
             return item;
         }
@@ -397,8 +398,39 @@
             }
         }, { passive: true });
 
+        // 获取Steam在线人数
+        async function fetchSteamOnline() {
+            try {
+                const response = await fetch('https://store.steampowered.com/stats/userdata.json');
+                if (!response.ok) throw new Error('Network error');
+
+                const data = await response.json();
+
+                // 获取最新的在线人数（数据格式为 [[timestamp, onlineCount], ...]）
+                if (data && data.length > 0) {
+                    const latestData = data[data.length - 1];
+                    const onlineCount = latestData[1];
+                    const formatted = onlineCount.toLocaleString();
+
+                    const steamElement = document.getElementById('steam-online');
+                    if (steamElement) {
+                        steamElement.textContent = formatted + ' users';
+                    }
+                }
+            } catch (error) {
+                const steamElement = document.getElementById('steam-online');
+                if (steamElement) {
+                    steamElement.textContent = 'Error';
+                }
+            }
+        }
+
         initClocks();
         setInterval(updateClocks, 1000);
+
+        // 立即获取Steam数据，并每60秒更新一次
+        fetchSteamOnline();
+        setInterval(fetchSteamOnline, 60000);
 
         document.addEventListener('touchmove', function(e) {
             if (e.target.closest('.refresh-btn')) return;
