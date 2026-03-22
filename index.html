@@ -646,16 +646,17 @@
                             desc = desc.length > 80 ? desc.substring(0, 80) + '...' : desc;
                         }
 
-                        // 判断是否需要翻译（非中文新闻需要翻译）
-                        let title = item.title;
-                        let translatedDesc = desc || '暂无详情';
+                        // BBC中文新闻保持中文，其他新闻翻译成中文
+                        let title, translatedDesc;
 
-                        // BBC中文新闻不需要翻译
-                        if (!city.rssUrl.includes('/zhongwen/')) {
+                        if (city.rssUrl.includes('/zhongwen/')) {
+                            // BBC中文新闻已经是中文，直接使用
+                            title = item.title;
+                            translatedDesc = desc || '暂无详情';
+                        } else {
+                            // 其他语言新闻翻译成中文
                             title = await translateText(item.title);
-                            if (desc) {
-                                translatedDesc = await translateText(desc);
-                            }
+                            translatedDesc = desc ? await translateText(desc) : '暂无详情';
                         }
 
                         newsHTML += `
