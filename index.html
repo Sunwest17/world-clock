@@ -158,6 +158,38 @@
             z-index: -1;
             opacity: 0.3;
         }
+
+        /* 碎片动画容器 */
+        .fragment {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            width: 8px;
+            height: 8px;
+            opacity: 0;
+        }
+
+        @keyframes fragmentFall {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(300px) rotate(720deg) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* 点击震动效果 */
+        .shake {
+            animation: shake 0.1s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px) rotate(-1deg); }
+            75% { transform: translateX(3px) rotate(1deg); }
+        }
     </style>
 </head>
 <body>
@@ -296,6 +328,74 @@
                 navigator.vibrate(50);
             }
         }
+
+        // 创建碎片效果
+        function createFragments(x, y) {
+            const colors = ['#0f0', '#f0f', '#ff0', '#0ff', '#fff'];
+            const fragmentCount = 12;
+
+            for (let i = 0; i < fragmentCount; i++) {
+                const fragment = document.createElement('div');
+                fragment.className = 'fragment';
+                fragment.style.left = x + 'px';
+                fragment.style.top = y + 'px';
+                fragment.style.background = colors[Math.floor(Math.random() * colors.length)];
+                fragment.style.animation = `fragmentFall ${0.5 + Math.random() * 0.3}s ease-out forwards`;
+
+                // 随机方向
+                const angle = (Math.PI * 2 * i) / fragmentCount;
+                const distance = 30 + Math.random() * 50;
+                const offsetX = Math.cos(angle) * distance;
+                const offsetY = Math.sin(angle) * distance - 50;
+
+                fragment.style.setProperty('--offset-x', offsetX + 'px');
+                fragment.style.setProperty('--offset-y', offsetY + 'px');
+
+                document.body.appendChild(fragment);
+
+                // 动画结束后移除
+                setTimeout(() => {
+                    fragment.remove();
+                }, 1000);
+            }
+        }
+
+        // 触摸/点击事件处理
+        document.addEventListener('click', function(e) {
+            createFragments(e.clientX, e.clientY);
+
+            // 震动反馈
+            if (navigator.vibrate) {
+                navigator.vibrate(30);
+            }
+
+            // 添加震动效果到被点击的元素
+            const target = e.target.closest('.clock-item') || e.target.closest('.refresh-btn') || e.target.closest('header');
+            if (target) {
+                target.classList.add('shake');
+                setTimeout(() => {
+                    target.classList.remove('shake');
+                }, 100);
+            }
+        });
+
+        // 触摸事件支持
+        document.addEventListener('touchstart', function(e) {
+            const touch = e.touches[0];
+            createFragments(touch.clientX, touch.clientY);
+
+            if (navigator.vibrate) {
+                navigator.vibrate(30);
+            }
+
+            const target = e.target.closest('.clock-item') || e.target.closest('.refresh-btn') || e.target.closest('header');
+            if (target) {
+                target.classList.add('shake');
+                setTimeout(() => {
+                    target.classList.remove('shake');
+                }, 100);
+            }
+        }, { passive: true });
 
         initClocks();
         setInterval(updateClocks, 1000);
