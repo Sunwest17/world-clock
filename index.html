@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>世界时钟</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #000;
+            min-height: 100vh;
+            font-family: 'Courier New', 'VT323', monospace;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #0f0;
+        }
+
+        h1 {
+            font-size: 18px;
+            color: #0f0;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #0f0;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #f0f;
+            letter-spacing: 4px;
+        }
+
+        .clocks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .clock-item {
+            background: #111;
+            border: 1px solid #333;
+            padding: 15px;
+            position: relative;
+        }
+
+        .clock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .city-flag {
+            font-size: 24px;
+        }
+
+        .city-name {
+            font-size: 14px;
+            color: #ff0;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .time-display {
+            font-size: 32px;
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        .date-display {
+            font-size: 14px;
+            color: #0ff;
+            margin-bottom: 8px;
+        }
+
+        .info-line {
+            font-size: 12px;
+            color: #f0f;
+            line-height: 1.5;
+        }
+
+        .refresh-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background: #0f0;
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .refresh-btn:active {
+            background: #0a0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            border-top: 1px solid #333;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .blink {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .time-display {
+            font-family: 'Courier New', 'VT323', monospace;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .pixel-border {
+            position: relative;
+        }
+
+        .pixel-border::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: -2px;
+            bottom: -2px;
+            background: #0f0;
+            z-index: -1;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>▓▓ 世界时钟 ▓▓</h1>
+            <div class="subtitle">实时同步中 <span class="blink">●</span></div>
+        </header>
+
+        <div class="clocks-list" id="clocks-list">
+            <!-- 时钟列表将通过JS动态生成 -->
+        </div>
+
+        <button class="refresh-btn" onclick="refreshAll()">⚡ 刷新时间</button>
+
+        <footer>
+            ━━━━━━━━━━━━━━━━━━━<br>
+            12个城市 · 24小时制<br>
+            每秒自动更新<br>
+            ━━━━━━━━━━━━━━━━━━━
+        </footer>
+    </div>
+
+    <script>
+        const cities = [
+            { name: '北京', timezone: 'Asia/Shanghai', flag: '🇨🇳' },
+            { name: '东京', timezone: 'Asia/Tokyo', flag: '🇯🇵' },
+            { name: '纽约', timezone: 'America/New_York', flag: '🇺🇸' },
+            { name: '伦敦', timezone: 'Europe/London', flag: '🇬🇧' },
+            { name: '巴黎', timezone: 'Europe/Paris', flag: '🇫🇷' },
+            { name: '悉尼', timezone: 'Australia/Sydney', flag: '🇦🇺' },
+            { name: '迪拜', timezone: 'Asia/Dubai', flag: '🇦🇪' },
+            { name: '莫斯科', timezone: 'Europe/Moscow', flag: '🇷🇺' },
+            { name: '洛杉矶', timezone: 'America/Los_Angeles', flag: '🇺🇸' },
+            { name: '新加坡', timezone: 'Asia/Singapore', flag: '🇸🇬' },
+            { name: '柏林', timezone: 'Europe/Berlin', flag: '🇩🇪' },
+            { name: '首尔', timezone: 'Asia/Seoul', flag: '🇰🇷' }
+        ];
+
+        function formatTime(date, timezone) {
+            const options = {
+                timeZone: timezone,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            };
+            return date.toLocaleTimeString('zh-CN', options);
+        }
+
+        function formatDate(date, timezone) {
+            const options = {
+                timeZone: timezone,
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                weekday: 'short'
+            };
+            return date.toLocaleDateString('zh-CN', options);
+        }
+
+        function getOffset(timezone) {
+            try {
+                const date = new Date();
+                const targetDate = new Date(date.toLocaleString('en-US', { timeZone: timezone }));
+                const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
+                const offset = (targetDate - utcDate) / 3600000;
+
+                const hours = Math.floor(offset);
+                return offset >= 0 ? `UTC+${hours}` : `UTC${hours}`;
+            } catch {
+                return 'UTC';
+            }
+        }
+
+        function getTimeDifference(tz1, tz2) {
+            try {
+                const now = new Date();
+                const date1 = new Date(now.toLocaleString('en-US', { timeZone: tz1 }));
+                const date2 = new Date(now.toLocaleString('en-US', { timeZone: tz2 }));
+                const diff = (date1 - date2) / 3600000;
+
+                if (diff === 0) return '0';
+                return diff > 0 ? `+${diff}` : diff;
+            } catch {
+                return '0';
+            }
+        }
+
+        function createClockItem(city) {
+            const now = new Date();
+            const time = formatTime(now, city.timezone);
+            const date = formatDate(now, city.timezone);
+            const offset = getOffset(city.timezone);
+            const beijingDiff = getTimeDifference(city.timezone, 'Asia/Shanghai');
+
+            const item = document.createElement('div');
+            item.className = 'clock-item pixel-border';
+            item.innerHTML = `
+                <div class="clock-header">
+                    <span class="city-flag">${city.flag}</span>
+                    <span class="city-name">${city.name}</span>
+                </div>
+                <div class="time-display" data-timezone="${city.timezone}">${time}</div>
+                <div class="date-display">${date}</div>
+                <div class="info-line">${offset} · 相对北京 ${beijingDiff}h</div>
+            `;
+            return item;
+        }
+
+        function initClocks() {
+            const list = document.getElementById('clocks-list');
+            list.innerHTML = '';
+
+            cities.forEach(city => {
+                const item = createClockItem(city);
+                list.appendChild(item);
+            });
+        }
+
+        function updateClocks() {
+            const now = new Date();
+            const timeElements = document.querySelectorAll('.time-display');
+
+            timeElements.forEach(element => {
+                const timezone = element.dataset.timezone;
+                element.textContent = formatTime(now, timezone);
+            });
+        }
+
+        function refreshAll() {
+            initClocks();
+            updateClocks();
+
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        }
+
+        initClocks();
+        setInterval(updateClocks, 1000);
+
+        document.addEventListener('touchmove', function(e) {
+            if (e.target.closest('.refresh-btn')) return;
+        }, { passive: true });
+    </script>
+</body>
+</html>
