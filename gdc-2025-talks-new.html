@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GDC 2025 | Game Developers Conference | 精选演讲总结</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #fafafa;
+            --bg-card: #ffffff;
+            --bg-expanded: #f5f5f5;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-muted: #8a8a8a;
+            --accent: #000000;
+            --border: #e0e0e0;
+            --border-strong: #d0d0d0;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-hover: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        .header {
+            background: var(--text-primary);
+            color: #fff;
+            padding: 80px 40px 60px;
+            text-align: center;
+        }
+
+        .header-label {
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: clamp(36px, 6vw, 64px);
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 16px;
+            color: #fff;
+        }
+
+        .header-subtitle {
+            font-size: 16px;
+            color: #888;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .header-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #fff;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        /* Navigation */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 0;
+        }
+
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .nav-inner::-webkit-scrollbar { display: none; }
+
+        .nav a {
+            flex-shrink: 0;
+            padding: 16px 24px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav a:hover {
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+        }
+
+        .nav a.active {
+            color: var(--text-primary);
+            border-bottom-color: var(--accent);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 100px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            gap: 20px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-number {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .section-count {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        /* Talk Card */
+        .talk-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            margin-bottom: 16px;
+            transition: all 0.2s;
+        }
+
+        .talk-card:hover {
+            border-color: var(--border-strong);
+            box-shadow: var(--shadow);
+        }
+
+        .talk-header {
+            padding: 28px 32px;
+            cursor: pointer;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .talk-tag {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            padding: 4px 10px;
+            margin-bottom: 12px;
+        }
+
+        .talk-title {
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .talk-speaker {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .talk-speaker strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .talk-summary {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .talk-toggle {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border);
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .talk-card.expanded .talk-toggle {
+            background: var(--text-primary);
+            color: #fff;
+            border-color: var(--text-primary);
+        }
+
+        .talk-card.expanded:hover .talk-toggle {
+            background: #333;
+        }
+
+        /* Expanded Content */
+        .talk-content {
+            display: none;
+            padding: 0 32px 32px;
+            border-top: 1px solid var(--border);
+        }
+
+        .talk-card.expanded .talk-content {
+            display: block;
+        }
+
+        .content-block {
+            margin-top: 24px;
+        }
+
+        .content-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .content-block p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .content-block ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .content-block li {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            border-bottom: 1px solid var(--bg-expanded);
+        }
+
+        .content-block li:last-child {
+            border-bottom: none;
+        }
+
+        .content-block li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 16px;
+            width: 6px;
+            height: 1px;
+            background: var(--text-primary);
+        }
+
+        /* Key Points Grid */
+        .key-points {
+            background: var(--bg-expanded);
+            padding: 20px 24px;
+            margin-top: 16px;
+        }
+
+        .key-points h4 {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .key-points ul {
+            list-style: none;
+        }
+
+        .key-points li {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            padding: 6px 0;
+        }
+
+        /* Quote Block */
+        .quote-block {
+            border-left: 3px solid var(--text-primary);
+            padding: 16px 20px;
+            background: var(--bg-expanded);
+            margin: 16px 0;
+        }
+
+        .quote-block p {
+            font-size: 14px;
+            font-style: italic;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            padding: 60px 40px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 2;
+        }
+
+        .footer a {
+            color: var(--text-primary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .footer a:hover {
+            border-bottom-color: var(--text-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 50px 24px 40px;
+            }
+            .header-stats {
+                gap: 30px;
+            }
+            .container {
+                padding: 40px 20px;
+            }
+            .talk-header {
+                padding: 20px;
+                grid-template-columns: 1fr;
+            }
+            .talk-toggle {
+                display: none;
+            }
+            .talk-content {
+                padding: 0 20px 20px;
+            }
+            .section-header {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .talk-card {
+            animation: fadeIn 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <div class="header-label">Game Developers Conference 2025</div>
+    <h1>GDC 2025</h1>
+    <p class="header-subtitle">从 300+ 场演讲中精选 40+ 场最具价值的主题分享，涵盖人工智能、图形渲染、游戏设计、音频、独立游戏与叙事设计等领域</p>
+    <div class="header-stats">
+        <div class="stat-item">
+            <span class="stat-number">40+</span>
+            <div class="stat-label">精选演讲</div>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number">7</span>
+            <div class="stat-label">主题领域</div>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number">300+</span>
+            <div class="stat-label">年度总演讲</div>
+        </div>
+    </div>
+</header>
+
+<!-- Navigation -->
+<nav class="nav">
+    <div class="nav-inner">
+        <a href="#ai">Artificial Intelligence</a>
+        <a href="#graphics">Graphics & Rendering</a>
+        <a href="#programming">Programming</a>
+        <a href="#design">Game Design</a>
+        <a href="#indie">Indie Games</a>
+        <a href="#narrative">Narrative Design</a>
+        <a href="#audio">Audio</a>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container">
+
+    <!-- AI Section -->
+    <section class="section" id="ai">
+        <div class="section-header">
+            <span class="section-number">01</span>
+            <h2 class="section-title">Artificial Intelligence / Machine Learning</h2>
+            <span class="section-count">8 talks</span>
+        </div>
+
+        <!-- Talk 1 -->
+        <article class="talk-card" data-talk="scalli">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Game AI Summit</span>
+                    <h3 class="talk-title">SCALLS: Developing Generalist AI Agents Using Video Games</h3>
+                    <p class="talk-speaker"><strong>Alexander Murlakov</strong> | Google DeepMind</p>
+                    <p class="talk-summary">Google DeepMind shares SCALLS - a Scalable, Instructable, Multi-World Agent that can execute natural language instructions across diverse video game environments. This project explores using games as a training ground for developing general AI.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>SCALLS (Scalable, Instructable, Multi-World Agent) is a groundbreaking project from Google DeepMind. The agent demonstrates not only excellent performance in individual games but crucially possesses cross-game generalization capabilities - skills learned in Astroneer can transfer to Simulation Farm or Happy Farm. The speaker detailed the system's technical architecture, including how the visual encoder, language understanding module, and action execution layer work together.</p>
+                    <p>SCALLS（可扩展指令多世界代理）是谷歌深度思维推出的开创性项目。该代理不仅能在单一游戏中表现出色，更关键的是具备跨游戏的泛化能力——在《异星探险家》中学到的技能可以迁移到《模拟农场》或《开心农场》中。</p>
+                </div>
+                <div class="content-block">
+                    <div class="content-label">Core Technical Highlights / 核心技术亮点</div>
+                    <ul>
+                        <li><strong>SCALLS Architecture:</strong> Vision-language-action integrated design based on large language models / 基于大语言模型的视觉-语言-动作一体化设计</li>
+                        <li><strong>Cross-Game Generalization:</strong> AI trained in one game can transfer to other games / 在一个游戏中训练的AI可以迁移到其他游戏中</li>
+                        <li><strong>World Knowledge Embedding:</strong> Game state information encoded into the agent's reasoning process / 将游戏世界的状态信息编码到代理的推理过程中</li>
+                        <li><strong>Progressive Training:</strong> From simple instructions to complex tasks / 从简单指令到复杂任务的渐进式训练策略</li>
+                    </ul>
+                </div>
+                <div class="content-block">
+                    <div class="content-label">Industry Impact / 行业影响</div>
+                    <p>The SCALLS project demonstrates that games can serve as ideal environments for training generalist AI agents. This "games as training ground" methodology is being adopted by more research institutions and enterprises, promising to advance the development of artificial general intelligence.</p>
+                    <p>斯卡莉项目证明了游戏可以作为训练通用人工智能代理的理想环境。这种"以游戏为训练场"的方法论正在被越来越多的研究机构和企业采纳，有望推动通用人工智能的发展。</p>
+                </div>
+                <div class="quote-block">
+                    <p>"Games provide an ideal controlled, quantifiable, and reproducible environment for AI research. The diversity of game worlds makes them perfect for training generalist agents."</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 2 -->
+        <article class="talk-card" data-talk="r6-siege">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Machine Learning Summit</span>
+                    <h3 class="talk-title">Rainbow Six Siege: "Operation Bot" - Creating Intelligent Opponents with Machine Learning</h3>
+                    <p class="talk-speaker"><strong>Joshua Romoff</strong> | Ubisoft</p>
+                    <p class="talk-summary">Ubisoft details the design and implementation of AI bot systems in Rainbow Six Siege. This talk focuses on how machine learning creates AI opponents that simulate real player behavior in multiplayer competitive environments.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Rainbow Six Siege is a highly competitive tactical shooter. Ubisoft's AI bot system aims to provide newcomers with a safe learning environment while also serving for testing and balancing game content. The speaker detailed how combining imitation learning and reinforcement learning enables AI bots to simulate different skill-level player behavior patterns.</p>
+                    <p>《彩虹六号：围攻》是一款高度竞技化的战术射击游戏，育碧为其开发的AI机器人系统旨在为新手提供一个安全的学习环境，同时也用于测试和平衡游戏内容。</p>
+                </div>
+                <div class="content-block">
+                    <div class="content-label">Technical Challenges / 技术难点</div>
+                    <ul>
+                        <li>Training AI in tactical shooters faces unique challenges: geometric complexity of maps, multi-agent collaboration needs, and dynamic scene variations / 战术射击游戏中训练AI面临独特挑战：游戏地图的几何复杂性、多角色协作需求以及动态场景变化</li>
+                        <li>Ubisoft developed a layered decision system separating macro tactical decisions from micro operations / 育碧团队开发了分层决策系统，将宏观战术决策与微观操作分离处理</li>
+                        <li>Reinforcement learning-based bot behavior training pipeline / 基于强化学习的机器人行为训练管线</li>
+                        <li>Balancing AI difficulty and fun in tactical shooters / 如何在战术射击游戏中平衡AI的难度与趣味性</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 3 -->
+        <article class="talk-card" data-talk="for-honor">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Machine Learning Summit</span>
+                    <h3 class="talk-title">Building a Statistical Analysis-Based Anti-Cheat Framework for For Honor</h3>
+                    <p class="talk-speaker"><strong>Bettina Hein</strong> | Ubisoft Entertainment</p>
+                    <p class="talk-summary">Ubisoft demonstrates how to build anti-cheat frameworks using statistical analysis and machine learning. By analyzing player behavior data patterns, they achieve automated detection and classification of cheating behavior.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Cheat detection is a common challenge for all online competitive games. Traditional signature-based anti-cheat methods are easily circumvented. Ubisoft proposed a new approach based on behavioral statistical analysis. By collecting extensive data on normal players and known cheaters, they built anomaly detection models that can identify abnormal behavior without relying on specific cheat tool signatures.</p>
+                    <p>作弊检测是所有在线竞技游戏面临的共同挑战。传统的基于签名的反作弊方法容易被规避，而育碧提出了一种基于行为统计分析的新方法。</p>
+                </div>
+                <div class="content-block">
+                    <div class="content-label">Key Innovation / 核心创新</div>
+                    <p>The system's key innovation lies in its "progressive confidence" mechanism - instead of banning players for one suspicious behavior, it builds reliability through continuous observation and cumulative evidence, achieving the best balance between anti-cheat effectiveness and player experience.</p>
+                    <p>该系统的关键创新在于其"渐进式置信度"机制——不会因为一次可疑行为就封禁玩家，而是通过持续观察和累积证据来提高判断的可靠性。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 4 -->
+        <article class="talk-card" data-talk="game-ai-history">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Game AI Summit</span>
+                    <h3 class="talk-title">A History of Game AI: From Rule Systems to Deep Learning</h3>
+                    <p class="talk-speaker"><strong>Yoichiro Miiike</strong> | Square Enix</p>
+                    <p class="talk-summary">A panoramic review of game AI development history from Square Enix. Systematically tracing the technological evolution from early finite state machines to behavior trees, then to deep learning and generative AI.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Yoichiro Miiike is a veteran AI researcher in the Japanese game industry. This talk is not only a review of technological evolution but also deep thinking about game design philosophy - AI technology advances don't mean the obsolescence of old methods, but provide designers with a richer toolkit.</p>
+                    <p>三池洋一郎是日本游戏行业资深的AI研究者。这场演讲不仅是对技术演进的回顾，更是对游戏设计哲学的深度思考。</p>
+                </div>
+                <div class="content-block">
+                    <div class="content-label">Core Insights / 核心观点</div>
+                    <div class="quote-block">
+                        <p>"Many classic AI technologies (such as finite state machines, behavior trees) remain indispensable in modern games. Their advantages lie in predictability and controllability. Deep learning and generative AI are more suitable for 'fuzzy decision-making' and 'behavioral diversity' scenarios. The best practice is to choose the right tool for the specific need, rather than blindly pursuing new technology."</p>
+                    </div>
+                    <p>演讲者特别强调，许多经典AI技术在现代游戏中仍然不可或缺，它们的优势在于可预测性和可控性。深度学习和生成式AI更适合用于"模糊决策"和"行为多样性"的场景。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 5 -->
+        <article class="talk-card" data-talk="honor-of-kings">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Arm Developer Summit</span>
+                    <h3 class="talk-title">AI Coaching in MOBA Games: A Case Study With Honor of Kings</h3>
+                    <p class="talk-speaker"><strong>Wenxi Zhu</strong> | Tencent</p>
+                    <p class="talk-summary">Tencent presents AI coaching systems for Honor of Kings, exploring how AI can assist player skill development in competitive games.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>This session explores how AI systems can provide personalized coaching to players in the world's highest-grossing mobile game. The system analyzes player behavior patterns, identifies weaknesses, and provides targeted improvement suggestions.</p>
+                    <p>本演讲探讨AI系统如何为全球收入最高的手游玩家提供个性化辅导。系统分析玩家行为模式，识别弱点，并提供有针对性的改进建议。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 6 -->
+        <article class="talk-card" data-talk="arena-breakout">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Game AI Summit</span>
+                    <h3 class="talk-title">F.A.C.U.L.: The First FPS AI Companion Who Understands Human Language</h3>
+                    <p class="talk-speaker"><strong>Elvis Liu</strong> | Tencent Games</p>
+                    <p class="talk-summary">Exploring how to implement natural language interaction with AI companions in FPS games like Arena Breakout, integrating voice input, LLM, and real-time TTS technologies.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>F.A.C.U.L. represents a breakthrough in FPS AI companions - players can communicate with their AI teammate using natural voice commands. The system combines voice recognition, large language models, and real-time text-to-speech to create an immersive AI companion experience.</p>
+                    <p>F.A.C.U.L.代表了FPS AI同伴的突破——玩家可以使用自然语音命令与AI队友交流。系统结合了语音识别、大语言模型和实时文本转语音，创造沉浸式AI同伴体验。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 7 -->
+        <article class="talk-card" data-talk="lego-horizon">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Game AI Summit</span>
+                    <h3 class="talk-title">AI Combat System in LEGO Horizon Adventures</h3>
+                    <p class="talk-speaker">Speaker TBD | Studio</p>
+                    <p class="talk-summary">Detailed analysis of the AI combat system design in LEGO Horizon Adventures, demonstrating how AI enhances family-friendly action game experiences.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>This session dives deep into how AI systems create engaging combat experiences suitable for all ages in the LEGO-branded action game. Topics include adaptive difficulty, companion AI, and enemy behavior design.</p>
+                    <p>本演讲深入探讨AI系统如何在乐高品牌动作游戏中创造适合所有年龄段的战斗体验。主题包括自适应难度、同伴AI和敌人行为设计。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 8 -->
+        <article class="talk-card" data-talk="kingdom-come">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Game AI Summit</span>
+                    <h3 class="talk-title">Kingdom Come: Deliverance II - Combining GOAP and MBT for NPC Behavior</h3>
+                    <p class="talk-speaker">Speaker TBD | Warhorse Studios</p>
+                    <p class="talk-summary">Exploring how Kingdom Come: Deliverance II uses Goal-Oriented Action Planning (GOAP) and Moscow Behavior Tree (MBT) to create historically authentic NPC behaviors.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>The sequel to the critically acclaimed medieval RPG demonstrates advanced AI systems that create believable NPCs grounded in historical accuracy. The combination of GOAP and MBT allows for complex, contextually appropriate behaviors.</p>
+                    <p>这款备受好评的中世纪RPG续作展示了先进的AI系统，创造出基于历史真实性的可信NPC。GOAP和MBT的结合允许复杂、情境适当的行为。</p>
+                </div>
+            </div>
+        </article>
+
+    </section>
+
+    <!-- Graphics Section -->
+    <section class="section" id="graphics">
+        <div class="section-header">
+            <span class="section-number">02</span>
+            <h2 class="section-title">Graphics & Rendering</h2>
+            <span class="section-count">8 talks</span>
+        </div>
+
+        <!-- Talk 1 -->
+        <article class="talk-card" data-talk="black-myth">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Advanced Graphics Summit</span>
+                    <h3 class="talk-title">Black Myth: Wukong - A Deep Dive into RTX Integration</h3>
+                    <p class="talk-speaker"><strong>Xueqing Yang</strong> | NVIDIA</p>
+                    <p class="talk-summary">NVIDIA and Game Science share technical details, challenges, and engine modifications in integrating full ray tracing and DLSS for Black Myth: Wukong.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Black Myth: Wukong is a milestone in NVIDIA's path tracing technology showcase. The Chinese ancient architecture scenes (temples, mountains, forests) present extremely high requirements for path tracing technology due to their complex geometric structures and rich lighting variations.</p>
+                    <p>《黑神话：悟空》是英伟达路径追踪技术展示的里程碑之作。游戏中的中国古建筑场景（寺庙、山川、森林）因其复杂的几何结构和丰富的光影变化，对路径追踪技术提出了极高要求。</p>
+                </div>
+                <div class="content-block">
+                    <div class="content-label">Technical Achievements / 技术成就</div>
+                    <ul>
+                        <li>Full ray tracing implementation across all lighting scenarios / 全场景光线追踪实现</li>
+                        <li>DLSS 3 integration for performance optimization / DLSS 3集成性能优化</li>
+                        <li>Custom engine modifications for traditional Chinese architecture / 针对中国传统建筑的定制引擎修改</li>
+                        <li>Real-time global illumination in complex outdoor scenes / 复杂户外场景实时全局光照</li>
+                    </ul>
+                </div>
+                <div class="quote-block">
+                    <p>"The combination of RTX and DLSS enables us to achieve visual fidelity that was previously only possible in pre-rendered content, at playable frame rates."</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 2 -->
+        <article class="talk-card" data-talk="cyberpunk-anim">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Programming</span>
+                    <h3 class="talk-title">Cyberpunk 2077 - Cinematic Animation Pipeline: From Motion Capture to Real-Time Rendering</h3>
+                    <p class="talk-speaker"><strong>CD PROJEKT RED Team</strong> | CD PROJEKT RED</p>
+                    <p class="talk-summary">Detailed introduction of the complete animation pipeline from motion capture data acquisition to final in-game real-time rendering for Cyberpunk 2077's cinematic cutscenes.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Cyberpunk 2077 is renowned for its film-quality cutscenes. The speaker detailed the complete animation pipeline from motion capture to real-time rendering. Particularly noteworthy is how the system handles seamless state recovery when characters exit cutscenes in the open world environment.</p>
+                    <p>《赛博朋克2077》以其电影级别的过场动画而闻名。演讲者详细介绍了从动作捕捉数据采集到最终游戏中实时渲染的完整动画管线。特别值得关注的是，该系统如何处理在开放世界环境中"角色离开过场动画后"的无缝状态恢复问题。</p>
+                </div>
+                <div class="content-block">
+                    <div class="content-label">Pipeline Components / 管线组件</div>
+                    <ul>
+                        <li>Motion capture data acquisition and processing / 动作捕捉数据采集与处理</li>
+                        <li>Facial animation system with performance capture / 表演捕捉面部动画系统</li>
+                        <li>Real-time rendering optimization for cutscenes / 过场动画实时渲染优化</li>
+                        <li>Seamless character state transitions / 无缝角色状态转换</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 3 -->
+        <article class="talk-card" data-talk="astro-bot-graphics">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Programming</span>
+                    <h3 class="talk-title">Flex and Fun: Graphics Magic in ASTRO BOT</h3>
+                    <p class="talk-speaker"><strong>Tai Yamaguchi</strong> | Sony Interactive Entertainment</p>
+                    <p class="talk-summary">Sharing the graphics deformation technologies used in ASTRO BOT, such as SDF fluids and deformable water surface systems, to achieve stable 60fps performance.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>ASTRO BOT showcases the PS5's graphical capabilities through creative deformation techniques. The team developed SDF-based fluid simulations and dynamic water systems that deform in real-time while maintaining consistent 60fps performance.</p>
+                    <p>《ASTRO BOT》通过创意变形技术展示PS5的图形能力。团队开发了基于SDF的流体模拟和动态水系统，实时变形同时保持稳定的60fps性能。</p>
+                </div>
+                <div class="content-block">
+                    <div class="content-label">Techniques / 技术手段</div>
+                    <ul>
+                        <li>SDF (Signed Distance Field) fluid simulation / 有符号距离场流体模拟</li>
+                        <li>Deformable water surface systems / 可变形水面系统</li>
+                        <li>PS5 GPU architecture optimization / PS5 GPU架构优化</li>
+                        <li>60fps stability techniques / 60fps稳定性技术</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 4 -->
+        <article class="talk-card" data-talk="ea-texture">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Advanced Graphics Summit</span>
+                    <h3 class="talk-title">Revolutionizing Texture Pipelines: EA's Journey with Texture Sets</h3>
+                    <p class="talk-speaker"><strong>Martin Palko</strong> | Electronic Arts</p>
+                    <p class="talk-summary">Introducing how Electronic Arts simplified their texture workflow through "Texture Sets," enabling data-driven texture creation across multiple game franchises.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>EA's Texture Sets system revolutionizes how textures are created and managed across their game portfolio. By centralizing texture data and enabling data-driven workflows, artists can create consistent, high-quality textures more efficiently.</p>
+                    <p>EA的Texture Sets系统彻底改变了跨游戏产品线的纹理创建和管理方式。通过集中纹理数据并启用数据驱动的工作流程，艺术家可以更高效地创建一致、高质量的纹理。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 5 -->
+        <article class="talk-card" data-talk="marvel-rivals">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Advanced Graphics Summit</span>
+                    <h3 class="talk-title">Marvel Rivals: Creating a Real-Time Interactive Dr. Strange's Portal</h3>
+                    <p class="talk-speaker"><strong>Tieyi Zhang</strong> | Netease Games</p>
+                    <p class="talk-summary">Introducing how to implement real-time interactive portal effects in Unreal Engine while optimizing CPU/GPU performance.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>The Dr. Strange portal effect in Marvel Rivals demonstrates cutting-edge real-time rendering techniques. The team created a portal that players can actually enter and exit, with proper lighting, physics, and audio integration.</p>
+                    <p>《漫威争锋》中奇异博士传送门效果展示了尖端实时渲染技术。团队创建了玩家可以实际进入和离开的传送门，具有适当的照明、物理和音频集成。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 6 -->
+        <article class="talk-card" data-talk="cyberpunk-police">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Programming</span>
+                    <h3 class="talk-title">Heat, MaxTac and Blockades: Expanding the Police System in Cyberpunk 2077</h3>
+                    <p class="talk-speaker"><strong>Maciej Celmer</strong> | CD PROJEKT RED</p>
+                    <p class="talk-summary">In-depth analysis of dynamic generation technology for police chase systems in Cyberpunk 2077, including roadblocks and MaxTac AV generation logic.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>The Phantom Liberty expansion introduced a dramatically improved police system. This talk reveals the procedural generation algorithms behind police spawns, pursuit logic, and the terrifying MaxTac response teams.</p>
+                    <p>幻影自由资料片引入了大幅改进的警察系统。本演讲揭示了警察生成、追捕逻辑和可怕的MaxTac反应部队的程序生成算法。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 7 -->
+        <article class="talk-card" data-talk="stylized-outline">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Programming</span>
+                    <h3 class="talk-title">Generalized Stylized Post-Processing Outline Scheme</h3>
+                    <p class="talk-speaker"><strong>Shengwen Zheng, Zhe Zhong</strong> | PerfectWorld / Independent</p>
+                    <p class="talk-summary">Introducing a post-processing outline scheme for real-time non-photorealistic rendering, simulating hand-drawn effects.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>This technique enables games to achieve cel-shaded or painterly aesthetics without expensive custom shaders. The system works across different art styles and can be applied dynamically based on game state.</p>
+                    <p>这项技术使游戏能够在不需要昂贵定制着色器的情况下实现赛璐璐或绘画风格美学。系统可跨不同艺术风格工作，并可根据游戏状态动态应用。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 8 -->
+        <article class="talk-card" data-talk="astro-bot-physics">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Programming</span>
+                    <h3 class="talk-title">Advanced Physics in ASTRO BOT</h3>
+                    <p class="talk-speaker"><strong>Takumi Yoshida</strong> | Sony Interactive Entertainment</p>
+                    <p class="talk-summary">Detailed analysis of physics technologies used in ASTRO BOT, including rigid body simulation, fluids, soft bodies, cloth, and real-time destruction.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>ASTRO BOT pushes PS5's physics capabilities to the limit. The game features sophisticated rigid body simulations, fluid dynamics, soft body physics, cloth simulation, and real-time destruction effects - all running at 60fps.</p>
+                    <p>《ASTRO BOT》将PS5的物理能力发挥到极致。游戏具有复杂的刚体模拟、流体动力学、软体物理、布料模拟和实时破坏效果——全部以60fps运行。</p>
+                </div>
+                <div class="content-block">
+                    <div class="content-label">Physics Systems / 物理系统</div>
+                    <ul>
+                        <li>Rigid body simulation with constraints / 带约束的刚体模拟</li>
+                        <li>GPU-accelerated fluid dynamics / GPU加速流体动力学</li>
+                        <li>Soft body deformation / 软体变形</li>
+                        <li>Real-time cloth simulation / 实时布料模拟</li>
+                        <li>Procedural destruction / 程序化破坏</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+    </section>
+
+    <!-- Programming Section -->
+    <section class="section" id="programming">
+        <div class="section-header">
+            <span class="section-number">03</span>
+            <h2 class="section-title">Programming & Engineering</h2>
+            <span class="section-count">6 talks</span>
+        </div>
+
+        <!-- Talk 1 -->
+        <article class="talk-card" data-talk="database-mmorpg">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Programming Summit</span>
+                    <h3 class="talk-title">"Database-Oriented Design": Why We Built Our MMORPG Inside a Database</h3>
+                    <p class="talk-speaker"><strong>Tyler Cloutier</strong> | Clockwork Labs (SpacetimeDB)</p>
+                    <p class="talk-summary">Exploring why Clockwork Labs built their MMORPG backend entirely inside a database, sharing simplified development experience with RDBMS + WebAssembly.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Traditional multiplayer game backends typically involve game servers, databases, message queues, and multiple components. But Clockwork Labs chose a bold approach: running the entire game backend - including game logic, state management, and network synchronization - entirely inside a database.</p>
+                    <p>传统多人在线游戏的后端架构通常涉及游戏服务器、数据库、消息队列等多个组件，但钟表实验室选择了一个大胆的方案：将整个游戏后端——包括游戏逻辑、状态管理和网络同步——全部运行在数据库内部。</p>
+                </div>
+                <div class="content-block">
+                    <div class="content-label">Technical Innovation / 技术创新</div>
+                    <ul>
+                        <li>SpacetimeDB: A temporal database engine designed for games / SpacetimeDB：一款为游戏设计的时间数据库引擎</li>
+                        <li>All game logic runs as WebAssembly modules inside the database / 所有游戏逻辑作为WebAssembly模块在数据库内运行</li>
+                        <li>Automatic state synchronization across all connected clients / 所有连接客户端自动状态同步</li>
+                        <li>Dramatically simplified backend architecture / 大幅简化的后端架构</li>
+                    </ul>
+                </div>
+                <div class="quote-block">
+                    <p>"By putting the game inside the database, we eliminated the entire category of consistency bugs between server state and database state. The database is the truth."</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 2 -->
+        <article class="talk-card" data-talk="sea-of-thieves">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Programming Summit</span>
+                    <h3 class="talk-title">Building, Scaling, and Maintaining Sea of Thieves Live Services</h3>
+                    <p class="talk-speaker"><strong>Matt Cavanagh</strong> | Rare Ltd</p>
+                    <p class="talk-summary">Deep dive into Sea of Thieves' Azure-based microservices architecture, managing trillions of monthly requests and data migration.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Sea of Thieves has grown into one of Xbox's most successful live services. This talk reveals how Rare manages the massive scale of player interactions while maintaining the game's shared-world experience.</p>
+                    <p>《盗贼之海》已发展成为Xbox最成功的实时服务游戏之一。本演讲揭示了Rare如何在保持游戏共享世界体验的同时管理大规模玩家互动。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 3 -->
+        <article class="talk-card" data-talk="eggy-party">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Programming Summit</span>
+                    <h3 class="talk-title">Eggy Party: Server Architecture Supporting 40 Million DAU</h3>
+                    <p class="talk-speaker"><strong>Mengfei Li, Tong Sun</strong> | Netease Games</p>
+                    <p class="talk-summary">Sharing server architecture supporting 40 million DAU, including hybrid deployment, multi-cloud strategy, and AI-driven dynamic scaling.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Netease's Eggy Party serves one of the largest gaming audiences in China. This session covers their journey from a single monolithic server to a sophisticated distributed architecture handling 40 million daily active users.</p>
+                    <p>网易的蛋仔派对服务着中国最大的游戏用户群之一。本演讲涵盖了他们从单一单体服务器到处理4000万日活用户的复杂分布式架构的历程。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 4 -->
+        <article class="talk-card" data-talk="ue5-chaos">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Unreal Engine Session</span>
+                    <h3 class="talk-title">Dynamic Destruction in UE5 with the Chaos Destruction System</h3>
+                    <p class="talk-speaker"><strong>Jim VanAllen, Cedric Caillaud</strong> | Epic Games</p>
+                    <p class="talk-summary">Introducing UE5's Chaos destruction system, covering geometry fracturing, strain evaluation, and tool usage.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>The Chaos Physics Engine in Unreal Engine 5 brings Hollywood-quality destruction effects to real-time games. This session demonstrates practical workflows for creating believable destruction.</p>
+                    <p>虚幻引擎5中的Chaos物理引擎为实时游戏带来了好莱坞级别的破坏效果。本演讲演示了创建逼真破坏效果的实际工作流程。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 5 -->
+        <article class="talk-card" data-talk="hitman-entities">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Programming Summit</span>
+                    <h3 class="talk-title">Entities and Bricks: The Building Blocks of Hitman</h3>
+                    <p class="talk-speaker"><strong>Kasper Fauerby</strong> | IO Interactive</p>
+                    <p class="talk-summary">Introducing how IO Interactive's Glacier engine's entity system supports Hitman series content updates and visual scripting.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>The Hitman series has evolved over two decades while maintaining consistent quality. This talk reveals the entity-component architecture that enables such long-term content development.</p>
+                    <p>《杀手》系列在保持一致质量的同时已发展了二十年。本演讲揭示了支持这种长期内容开发的实体组件架构。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 6 -->
+        <article class="talk-card" data-talk="beef-lang">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Programming Summit</span>
+                    <h3 class="talk-title">Building Penny's Big Breakaway with Beef - A New Programming Language</h3>
+                    <p class="talk-speaker"><strong>Hunter Bridges</strong> | Evening Star</p>
+                    <p class="talk-summary">Sharing experience developing a commercial game using the new programming language Beef, including multi-platform deployment and debugging techniques.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Beef is a programming language designed specifically for game development. Evening Star shares their experience using it for Penny's Big Breakaway, highlighting productivity gains and multi-platform benefits.</p>
+                    <p>Beef是一款专为游戏开发设计的编程语言。Evening Star分享了使用它开发Penny's Big Breakaway的经验，突出了生产力提升和多平台优势。</p>
+                </div>
+            </div>
+        </article>
+
+    </section>
+
+    <!-- Design Section -->
+    <section class="section" id="design">
+        <div class="section-header">
+            <span class="section-number">04</span>
+            <h2 class="section-title">Game Design</h2>
+            <span class="section-count">10 talks</span>
+        </div>
+
+        <!-- Talk 1 -->
+        <article class="talk-card" data-talk="helldivers2">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Design Summit</span>
+                    <h3 class="talk-title">Helldivers 2: Capturing Lightning in a Bottle</h3>
+                    <p class="talk-speaker"><strong>Johan Pilestedt</strong> | Arrowhead Game Studios</p>
+                    <p class="talk-summary">Looking back at eight years of Helldivers 2 development, sharing how the team overcame challenges of insufficient planning through improvisation, resilience, and team spirit.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Helldivers 2 became one of the biggest surprises in gaming history, selling millions of copies and reaching 450,000 concurrent players on Steam. Johan Pilestedt shares the candid story of development struggles, near-cancellations, and how the team persevered.</p>
+                    <p>《绝地潜兵2》成为游戏史上最大的惊喜之一，在Steam上售出数百万份并达到45万同时在线玩家。约翰·皮勒斯特分享了开发艰辛、险些取消以及团队如何坚持下来的坦诚故事。</p>
+                </div>
+                <div class="content-block">
+                    <div class="content-label">Key Lessons / 关键经验</div>
+                    <ul>
+                        <li>Improvisation over extensive planning / 即兴创作胜过详尽规划</li>
+                        <li>Team culture and resilience / 团队文化和韧性</li>
+                        <li>Community feedback integration / 社区反馈整合</li>
+                        <li>Live service lessons from unexpected success / 意外成功带来的实时服务经验</li>
+                    </ul>
+                </div>
+                <div class="quote-block">
+                    <p>"We didn't plan for this success. We just kept making the game we wanted to play, and the community found us."</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 2 -->
+        <article class="talk-card" data-talk="honkai-star-rail">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Design Summit</span>
+                    <h3 class="talk-title">Honkai: Star Rail - Reimagining RPGs for Mass Audiences</h3>
+                    <p class="talk-speaker"><strong>Chengnan An</strong> | HoYoverse</p>
+                    <p class="talk-summary">Sharing how Honkai: Star Rail was designed to be both accessible and deep, and how continuous content updates maintain player interest.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Honkai: Star Rail demonstrates how to create a JRPG experience that appeals to both hardcore and casual audiences. The turn-based combat system provides depth while the narrative-driven approach ensures accessibility.</p>
+                    <p>《崩坏：星穹铁道》展示了如何创造同时吸引核心和休闲观众的JRPG体验。回合制战斗系统提供深度，而叙事驱动的方法确保了可接近性。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 3 -->
+        <article class="talk-card" data-talk="frostpunk2">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Design Summit</span>
+                    <h3 class="talk-title">Frostpunk 2: Speaking in Systems</h3>
+                    <p class="talk-speaker"><strong>Jakub Stokalski</strong> | 11 bit studios</p>
+                    <p class="talk-summary">Exploring how to merge game mechanics with narrative, manage complexity and difficulty, and enhance overall storytelling by aligning gameplay with player values.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Frostpunk 2 expands on its predecessor's survival city-building with more complex systems. This talk reveals how narrative themes are reinforced through systemic design rather than exposition.</p>
+                    <p>《冰汽时代2》通过更复杂的系统扩展了其前作的生存城市建设。本演讲揭示了叙事主题如何通过系统性设计而非 exposition 来强化。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 4 -->
+        <article class="talk-card" data-talk="civilization7">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Design Summit</span>
+                    <h3 class="talk-title">Reimagining Leaders for Civilization VII</h3>
+                    <p class="talk-speaker"><strong>Chandrahas Tanguturi, Rue Taylor</strong> | Firaxis Games</p>
+                    <p class="talk-summary">Cross-disciplinary team sharing the complete process of designing leaders for Civilization VII, balancing historical authenticity with creativity.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Civilization VII represents a new era for the legendary strategy series. This session reveals the research, design, and iteration process behind creating compelling leader representations.</p>
+                    <p>《文明VII》代表了这款传奇策略系列的新时代。本演讲揭示了创建引人入胜的领袖表现背后的研究、设计和迭代过程。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 5 -->
+        <article class="talk-card" data-talk="animal-well">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Independent Games Summit</span>
+                    <h3 class="talk-title">Developing at 5MB per Year: The Making of Animal Well</h3>
+                    <p class="talk-speaker"><strong>Billy Basso</strong> | Independent Developer</p>
+                    <p class="talk-summary">Billy Basso shares seven years of developing Animal Well from scratch - a 33MB game that received widespread acclaim.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Animal Well is a masterclass in efficient game development. Billy Basso developed the entire game alone over seven years, with an average development pace of just 5MB per year. The game's layered puzzle design and mysterious atmosphere created a unique experience.</p>
+                    <p>《动物井》是高效游戏开发的大师班。Billy Basso在七年内独自开发了整个游戏，平均每年开发量仅为5MB。游戏的多层谜题设计和神秘氛围创造了独特的体验。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 6 -->
+        <article class="talk-card" data-talk="astro-bot-prototype">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Design Summit</span>
+                    <h3 class="talk-title">Rapid and Creative Gameplay Prototyping in ASTRO BOT</h3>
+                    <p class="talk-speaker"><strong>Masayuki Yamada</strong> | Sony Interactive Entertainment</p>
+                    <p class="talk-summary">Introducing specific methods and cross-disciplinary collaboration processes for rapidly prototyping hundreds of unique game elements in ASTRO BOT.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>ASTRO BOT features over 80 unique levels, each with distinct gameplay mechanics. This talk reveals the rapid prototyping workflow that enabled such creative diversity.</p>
+                    <p>《ASTRO BOT》包含超过80个独特关卡，每个关卡都有不同的游戏机制。本演讲揭示了实现这种创意多样性的快速原型设计工作流程。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 7 -->
+        <article class="talk-card" data-talk="pacific-drive">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Design Summit</span>
+                    <h3 class="talk-title">Pacific Drive: Survival Fundamentals and Systems Design</h3>
+                    <p class="talk-speaker"><strong>Seth Rosen</strong> | Ironwood Studios</p>
+                    <p class="talk-summary">Sharing survival game fundamentals learned from Don't Starve, applied to Pacific Drive to avoid traditional survival game tropes.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Pacific Drive reinvents the survival genre by focusing on the car as the central survival element. This talk explores how Ironwood Studios applied lessons from Don't Starve to create something entirely new.</p>
+                    <p>《太平洋Drive》通过将汽车作为核心生存元素来革新生存类型。本演讲探讨了Ironwood Studios如何应用《饥荒》的经验来创造全新的东西。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 8 -->
+        <article class="talk-card" data-talk="prince-of-persia">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Design Summit</span>
+                    <h3 class="talk-title">Prince of Persia: The Lost Crown - Making a Modern Metroidvania</h3>
+                    <p class="talk-speaker"><strong>Remi Boutin</strong> | Ubisoft</p>
+                    <p class="talk-summary">Sharing how to balance challenge and accessibility in modern Metroidvania games, planning and developing accessibility features without a dedicated team.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Prince of Persia: The Lost Crown succeeded where many Metroidvanias fail - offering both hardcore challenge and accessible options. This talk reveals how Ubisoft balanced these competing design goals.</p>
+                    <p>《波斯王子：失落的王冠》在许多类银河战士恶魔城失败的地方取得了成功——同时提供核心挑战和可访问选项。本演讲揭示了Ubisoft如何平衡这些相互竞争的设计目标。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 9 -->
+        <article class="talk-card" data-talk="monument-valley-3">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Design Summit</span>
+                    <h3 class="talk-title">Monument Valley 3: Understanding the Past to Create a Modern Sequel</h3>
+                    <p class="talk-speaker"><strong>Emily Brown</strong> | ustwo games</p>
+                    <p class="talk-summary">Sharing how the team understood Monument Valley's past influence and advantages, and developed a sequel with equal impact using creative methods.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Creating a sequel to one of the most beloved puzzle games is challenging. Emily Brown shares how ustwo games honored the original while pushing into new creative territory.</p>
+                    <p>为一最受喜爱的益智游戏创建续集具有挑战性。Emily Brown分享了ustwo games如何在尊重原作的同时进入新的创意领域。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 10 -->
+        <article class="talk-card" data-talk="infinity-nikki">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Design Summit</span>
+                    <h3 class="talk-title">Teaching First-Time Level Designers for Infinity Nikki</h3>
+                    <p class="talk-speaker"><strong>Kentaro Tominaga</strong> | Infold Games</p>
+                    <p class="talk-summary">Sharing how to effectively train and develop large numbers of rookie level designers through a three-layer coaching method.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Infinity Nikki required training dozens of level designers who had never worked on games before. This talk reveals the "translate, communicate, debate" coaching framework that enabled rapid skill development.</p>
+                    <p>《无限暖暖》需要培训数十名从未做过游戏的关卡设计师。本演讲揭示了使技能快速发展的"翻译、沟通、辩论"教练框架。</p>
+                </div>
+            </div>
+        </article>
+
+    </section>
+
+    <!-- Indie Section -->
+    <section class="section" id="indie">
+        <div class="section-header">
+            <span class="section-number">05</span>
+            <h2 class="section-title">Independent Games</h2>
+            <span class="section-count">6 talks</span>
+        </div>
+
+        <!-- Talk 1 -->
+        <article class="talk-card" data-talk="balatro">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Independent Games Summit</span>
+                    <h3 class="talk-title">Balatro: How a One-Person Team Won GDC Awards 2025</h3>
+                    <p class="talk-speaker"><strong>LocalThunk</strong> | Independent Developer</p>
+                    <p class="talk-summary">Balatro won GDC 2025 Game of the Year. LocalThunk shares the distribution strategy, market positioning, and community operation experience from the publisher's perspective.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Balatro is a poker-themed roguelike deckbuilder that took the gaming world by storm. The game's success demonstrates how a solo developer can compete with AAA studios through innovative mechanics and strong community engagement.</p>
+                    <p>《小丑牌》是一款扑克主题的类Rogue卡牌构建游戏，风靡游戏界。游戏的成功展示了独立开发者如何通过创新机制和强大的社区参与与AAA工作室竞争。</p>
+                </div>
+                <div class="content-block">
+                    <div class="content-label">Key Success Factors / 关键成功因素</div>
+                    <ul>
+                        <li>Unique roguelike + poker fusion mechanic / 独特的类Rogue + 扑克融合机制</li>
+                        <li>Strong social media presence / 强大的社交媒体影响力</li>
+                        <li>Streamer-friendly design / 流媒体友好设计</li>
+                        <li>Continuous content updates / 持续内容更新</li>
+                    </ul>
+                </div>
+                <div class="quote-block">
+                    <p>"The roguelike deckbuilder genre was saturated, but no one had really explored poker. That was my unfair advantage."</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 2 -->
+        <article class="talk-card" data-talk="dwarf-fortress">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Independent Games Summit</span>
+                    <h3 class="talk-title">The Making of Dwarf Fortress</h3>
+                    <p class="talk-speaker"><strong>Tarn Adams</strong> | Bay 12 Games</p>
+                    <p class="talk-summary">Tarn Adams (aka Toady One) shares 20+ years of developing Dwarf Fortress, one of the most complex simulation games ever made.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Dwarf Fortress is considered one of the most complex simulation games ever created. Toady One shares the technical and design philosophy behind its emergent storytelling capabilities.</p>
+                    <p>《矮人要塞》被认为是有史以来最复杂的模拟游戏之一。Toady One分享了其涌现式叙事能力背后的技术和设计哲学。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 3 -->
+        <article class="talk-card" data-talk="harold-halibut">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Independent Games Summit</span>
+                    <h3 class="talk-title">Creating a Handcrafted Game: Harold Halibut Postmortem</h3>
+                    <p class="talk-speaker"><strong>Onat Hekimoglu, Ole Tillmann</strong> | SLOW BROS.</p>
+                    <p class="talk-summary">Sharing the 10+ year journey of creating Harold Halibut, using physical model scanning and Unity synthesis to create unique stop-motion visual style.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Harold Halibut spent over a decade in development, created by a tiny team using an unconventional stop-motion aesthetic. This postmortem reveals the challenges and triumphs of such an unconventional project.</p>
+                    <p>《Harold Halibut》开发时间超过十年，由一个小型团队使用非常规定格动画美学创建。本回顾揭示了这样一个非常规项目的挑战和成功。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 4 -->
+        <article class="talk-card" data-talk="steam-rules">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Independent Games Summit</span>
+                    <h3 class="talk-title">Marketing Your Game Under the New Steam Rules</h3>
+                    <p class="talk-speaker"><strong>Chris Zukowski</strong> | Game Marketing Strategist</p>
+                    <p class="talk-summary">Interpreting Valve's major changes to Steam platform exposure rules in 2024, sharing how successful developers adapt to new rules.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Steam's algorithm changes in 2024 dramatically affected indie game visibility. Chris Zukowski analyzes what worked before and provides strategies for success under the new system.</p>
+                    <p>2024年Steam算法变化显著影响了独立游戏可见性。Chris Zukowski分析了以前什么有效，并为新系统下的成功提供策略。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 5 -->
+        <article class="talk-card" data-talk="cosmoteer">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Independent Games Summit</span>
+                    <h3 class="talk-title">Free During Development: The Strategy of Cosmoteer</h3>
+                    <p class="talk-speaker"><strong>Walt Destler</strong> | Cosmoteer</p>
+                    <p class="talk-summary">Analyzing how Cosmoteer succeeded by offering free access during development, eventually finding success on Steam Early Access.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Cosmoteer's unusual strategy of being free during development built a passionate community before the game even launched commercially.</p>
+                    <p>《宇宙水兵》通过在开发期间免费提供的非传统策略，在游戏商业发布之前就建立了热情的社区。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 6 -->
+        <article class="talk-card" data-talk="phasmophobia">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Unity Developer Summit</span>
+                    <h3 class="talk-title">Building Fear: The Tech Behind Phasmophobia</h3>
+                    <p class="talk-speaker"><strong>Benjamin Lavender</strong> | Kinetic Games</p>
+                    <p class="talk-summary">Kinetic Games reveals core technologies behind the popular ghost-hunting game, including how Unity and algorithms create terrifying atmosphere and unpredictable ghost behaviors.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Phasmophobia became one of VR's biggest hits through clever use of procedural elements and social multiplayer mechanics. This talk reveals the technical secrets behind its horror systems.</p>
+                    <p>《恐鬼症》通过巧妙使用程序元素和社交多人游戏机制成为VR最大热门之一。本演讲揭示了其恐怖系统的技术秘密。</p>
+                </div>
+            </div>
+        </article>
+
+    </section>
+
+    <!-- Narrative Section -->
+    <section class="section" id="narrative">
+        <div class="section-header">
+            <span class="section-number">06</span>
+            <h2 class="section-title">Narrative Design</h2>
+            <span class="section-count">6 talks</span>
+        </div>
+
+        <!-- Talk 1 -->
+        <article class="talk-card" data-talk="cyberpunk-endings">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Narrative Summit</span>
+                    <h3 class="talk-title">Designing Endings: Balancing Player Expectations in Cyberpunk 2077: Phantom Liberty</h3>
+                    <p class="talk-speaker"><strong>Moritz Lehr, Pawel Ochocki</strong> | CD PROJEKT RED</p>
+                    <p class="talk-summary">Using Phantom Liberty endings as examples, exploring how to design endings for branching narratives while balancing player expectations with narrative integrity.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Designing satisfying endings for branching narratives is one of narrative design's greatest challenges. CD PROJEKT RED shares lessons learned from Phantom Liberty's multiple conclusion paths.</p>
+                    <p>为分支叙事设计令人满意的结局是叙事设计最大的挑战之一。CD PROJEKT RED分享了幻影自由多条结局路径的经验教训。</p>
+                </div>
+                <div class="content-block">
+                    <div class="content-label">Key Insights / 关键洞见</div>
+                    <ul>
+                        <li>Player agency must feel meaningful even when outcomes are limited / 即使结果有限，玩家代理也必须感觉有意义</li>
+                        <li>Narrative consequences should be established early / 叙事后果应该尽早建立</li>
+                        <li>Multiple valid endings require careful foreshadowing / 多个有效结局需要仔细的伏笔</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 2 -->
+        <article class="talk-card" data-talk="narrative-tools">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Narrative Summit</span>
+                    <h3 class="talk-title">Get Serious About Writing Tools</h3>
+                    <p class="talk-speaker"><strong>Jurie Horneman</strong> | Half Mermaid Productions</p>
+                    <p class="talk-summary">Calling for the game industry to establish open standards for narrative tools, proposing visual branching narrative editors, real-time engine sync, and multi-user version control.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Jurie Horneman, creator of foundational narrative tools at Ubisoft and founder of Half Mermaid, makes a passionate case for why the industry needs better, standardized writing tools.</p>
+                    <p>Jurie Horneman，前Ubisoft基础叙事工具创建者和Half Mermaid创始人，强烈主张业界需要更好、标准化的写作工具。</p>
+                </div>
+                <div class="content-block">
+                    <div class="content-label">Proposed Standards / 倡议标准</div>
+                    <ul>
+                        <li>Visual branching narrative editor / 可视化分支叙事编辑器</li>
+                        <li>Real-time sync with game engine / 与游戏引擎实时同步</li>
+                        <li>Multi-user collaborative version control / 多人协作版本控制</li>
+                        <li>Native support for AI-assisted writing / 原生支持AI辅助写作</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 3 -->
+        <article class="talk-card" data-talk="civilization7-narrative">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Narrative Summit</span>
+                    <h3 class="talk-title">Built in Layers: Creating History with Civilization VII's Narrative System</h3>
+                    <p class="talk-speaker"><strong>Cat Manning, Rue Taylor, Nell Raban, Andrew Johnson</strong> | Firaxis Games</p>
+                    <p class="talk-summary">Exploring the narrative event system design in Civilization VII, balancing historical authenticity with gameplay.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Creating compelling historical narratives in a strategy game requires balancing research accuracy with engaging storytelling. Firaxis shares their layered approach to Civilization VII's narrative systems.</p>
+                    <p>在策略游戏中创建引人入胜的历史叙事需要在研究准确性和引人入胜的讲故事之间取得平衡。Firaxis分享了他们创建文明VII叙事系统的分层方法。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 4 -->
+        <article class="talk-card" data-talk="pacific-drive-narrative">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Narrative Summit</span>
+                    <h3 class="talk-title">Ghosts on the Airwaves: Caring About Unseen Characters in Pacific Drive</h3>
+                    <p class="talk-speaker"><strong>Karrie Shirou Shao</strong> | Ironwood Studios</p>
+                    <p class="talk-summary">Exploring how Pacific Drive makes players care about NPCs they never see, through radio broadcasts and environmental storytelling.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Pacific Drive creates emotional connections with characters the player never directly meets. This talk reveals the techniques behind such indirect narrative approaches.</p>
+                    <p>《太平洋Drive》通过玩家从未直接见面的角色创造情感联系。本演讲揭示了这种间接叙事方法背后的技术。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 5 -->
+        <article class="talk-card" data-talk="system-story">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Narrative Summit</span>
+                    <h3 class="talk-title">Storytelling Through Systems: A Narrative Designer's Approach</h3>
+                    <p class="talk-speaker"><strong>Adam Dolin</strong> | Independent</p>
+                    <p class="talk-summary">A deep dive into how narrative designers can leverage game systems as storytelling tools, creating emergent narratives through mechanical design.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>When game systems themselves tell stories, players become active participants in narrative creation rather than passive observers.</p>
+                    <p>当游戏系统本身讲述故事时，玩家成为叙事创作的积极参与者，而不是被动观察者。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 6 -->
+        <article class="talk-card" data-talk="build-world">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Narrative Summit</span>
+                    <h3 class="talk-title">How to Build a Game World with Systems and Story</h3>
+                    <p class="talk-speaker"><strong>Anna Megill, Emily Short, Kaitlin Tremblay</strong> | Panel Discussion</p>
+                    <p class="talk-summary">Three veteran narrative designers share different approaches to building believable game worlds, and strategies for aligning story with gameplay and systems.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>This panel brings together three acclaimed narrative designers to compare methodologies for world-building that serves both story and gameplay goals.</p>
+                    <p>本小组汇集了三位知名叙事设计师，比较服务于故事和游戏目标的世界构建方法论。</p>
+                </div>
+            </div>
+        </article>
+
+    </section>
+
+    <!-- Audio Section -->
+    <section class="section" id="audio">
+        <div class="section-header">
+            <span class="section-number">07</span>
+            <h2 class="section-title">Audio</h2>
+            <span class="section-count">4 talks</span>
+        </div>
+
+        <!-- Talk 1 -->
+        <article class="talk-card" data-talk="star-wars-music">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Audio Summit</span>
+                    <h3 class="talk-title">From Symphonies to Villains: Adaptive Music in Star Wars Outlaws</h3>
+                    <p class="talk-speaker"><strong>Ubisoft Audio Team</strong> | Ubisoft</p>
+                    <p class="talk-summary">Exploring the creative process and challenges of designing the Sabacc mini-game music and adaptive music system in the open-world Star Wars game.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Star Wars Outlaws features a sophisticated adaptive music system that responds to player choices and gameplay states, while also including iconic mini-game music like Sabacc.</p>
+                    <p>《星球大战：亡命之徒》具有复杂的自适应音乐系统，可响应玩家选择和游戏状态，同时还包括标志性的小游戏音乐，如萨巴克。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 2 -->
+        <article class="talk-card" data-talk="snowdrop-audio">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Audio Summit</span>
+                    <h3 class="talk-title">GPU Raytracing for Audio in Snowdrop</h3>
+                    <p class="talk-speaker"><strong>Kasparas Eidukonis, Alexis Crickx</strong> | Ubisoft</p>
+                    <p class="talk-summary">Sharing practical experience of implementing sound propagation systems using hardware ray tracing in the Snowdrop engine.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>Ubisoft's Snowdrop engine now features GPU-accelerated audio ray tracing, allowing for realistic sound propagation in complex environments without CPU overhead.</p>
+                    <p>育碧的Snowdrop引擎现在具有GPU加速音频光线追踪，允许在复杂环境中进行逼真的声音传播，而无需CPU开销。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 3 -->
+        <article class="talk-card" data-talk="audio-plan">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Independent Games Summit</span>
+                    <h3 class="talk-title">How to Plan for Audio as a Developer</h3>
+                    <p class="talk-speaker"><strong>Em Halberstadt</strong> | Creative Director</p>
+                    <p class="talk-summary">Introducing the complete process of game audio design, including reference preparation, design techniques, implementation and mixing.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>This practical session covers everything indie developers need to know about planning and implementing game audio, even without dedicated audio team members.</p>
+                    <p>本实用课程涵盖独立开发者需要了解的关于规划和实施游戏音频的一切，即使没有专门的音频团队成员。</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Talk 4 -->
+        <article class="talk-card" data-talk="astro-bot-audio">
+            <div class="talk-header" onclick="toggleTalk(this)">
+                <div>
+                    <span class="talk-tag">Game Developers Choice Awards</span>
+                    <h3 class="talk-title">ASTRO BOT - Technology Award Winner</h3>
+                    <p class="talk-speaker"><strong>Sony Interactive Entertainment</strong></p>
+                    <p class="talk-summary">ASTRO BOT won GDC 2025 Technology Award for its innovative use of PS5 audio capabilities and DualSense controller features.</p>
+                </div>
+                <div class="talk-toggle">+</div>
+            </div>
+            <div class="talk-content">
+                <div class="content-block">
+                    <div class="content-label">Overview / 演讲概述</div>
+                    <p>ASTRO BOT's award-winning audio design demonstrates how thoughtful implementation of platform hardware can create uniquely immersive experiences.</p>
+                    <p>《ASTRO BOT》获奖的音频设计展示了如何通过深思熟虑的平台硬件实现来创造独特的沉浸式体验。</p>
+                </div>
+            </div>
+        </article>
+
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>GDC 2025 Game Developers Conference Selected Talk Summaries</p>
+    <p>Data Source: <a href="https://gdconf.com" target="_blank">gdconf.com</a> / GDC Vault</p>
+    <p>Content organized with AI assistance / 2025</p>
+</footer>
+
+<script>
+    function toggleTalk(header) {
+        const card = header.closest('.talk-card');
+        const isExpanded = card.classList.contains('expanded');
+        
+        // Close all other expanded cards
+        document.querySelectorAll('.talk-card.expanded').forEach(el => {
+            if (el !== card) {
+                el.classList.remove('expanded');
+                el.querySelector('.talk-toggle').textContent = '+';
+            }
+        });
+        
+        // Toggle current card
+        if (isExpanded) {
+            card.classList.remove('expanded');
+            header.querySelector('.talk-toggle').textContent = '+';
+        } else {
+            card.classList.add('expanded');
+            header.querySelector('.talk-toggle').textContent = '-';
+        }
+    }
+
+    // Smooth scroll for navigation
+    document.querySelectorAll('.nav a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const target = document.querySelector(targetId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // Update active state
+                document.querySelectorAll('.nav a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            }
+        });
+    });
+
+    // Update active nav on scroll
+    window.addEventListener('scroll', function() {
+        const sections = document.querySelectorAll('.section');
+        let current = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 200) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        document.querySelectorAll('.nav a').forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
